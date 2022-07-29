@@ -1,19 +1,16 @@
 {
   "name": "regular-web-app",
   "version": "1.0.0",
-  "description": "OpenID Connect Handbook: Securing Regular Web Apps",
+  "description": "OpenID Connect Web App",
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js"
   },
   "keywords": [
     "OpenID Connect",
-    "The OpenID Connect Handbook",
-    "OAuth 2.0",
-    "Web Application",
-    "Regular Web Application"
+    "OAuth 2.0"
   ],
-  "author": "Bruno Krebs <krebs.bruno@gmail.com>",
+  "author": "Adriaan Mutter <adriaan.mutter@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",

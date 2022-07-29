@@ -121,7 +121,6 @@ app.post('/callback', async (req, res) => {
     }
     req.session.decodedIdToken = verifiedToken;
     req.session.idToken = id_token;
-    35;
     // send the decoded version of the ID Token
     res.redirect('/profile');
   });
@@ -138,8 +137,8 @@ app.get('/remove-to-do/:id', async (req, res) => {
 request(discEnd)
   .then(res => {
     oidcProviderInfo = JSON.parse(res);
-    app.listen(3000, () => {
-      console.log(`Server running on http://localhost:3000`);
+    app.listen(3010, () => {
+      console.log(`Server running on http://localhost:3010`);
     });
   })
   .catch(error => {
