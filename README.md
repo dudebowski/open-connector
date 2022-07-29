@@ -5,3 +5,6 @@ This repository is a sample Node.js and Express web application that handles use
 You can find the handbook here: https://auth0.com/resources/ebooks/the-openid-connect-handbook
 
 Have fun!
+
+
+docker run -p 8080:8080 --name oidc-webapp-keycloack -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:19.0.0 start-dev
