@@ -8,11 +8,12 @@ const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 const request = require('request-promise');
 const session = require('express-session');
-const { OIDC_PROVIDER } = process.env;
-const discEnd = 'https://${OIDC_PROVIDER}/.well-known/openid-configuration';
 
 // loading env vars from .env file
 require('dotenv').config();
+
+const { OIDC_PROVIDER } = process.env;
+const discEnd = `http://${OIDC_PROVIDER}/.well-known/openid-configuration`;
 
 const nonceCookie = 'auth0rization-nonce';
 let oidcProviderInfo;
