@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 const request = require('request-promise');
 const session = require('express-session');
+const { OIDC_PROVIDER } = process.env;
+const discEnd = 'https://${OIDC_PROVIDER}/.well-known/openid-configuration';
 
 // loading env vars from .env file
 require('dotenv').config();
@@ -58,6 +60,15 @@ app.get('/remove-to-do/:id', async (req, res) => {
   res.status(501).send();
 });
 
-app.listen(3000, () => {
-  console.log(`Server running on http://localhost:3000`);
-});
+request(discEnd)
+  .then(res => {
+    oidcProviderInfo = JSON.parse(res);
+    app.listen(3000, () => {
+      console.log(`Server running on http://localhost:3000`);
+    });
+  })
+  .catch(error => {
+    console.error(error);
+    console.error(`Unable to get OIDC endpoints for ${OIDC_PROVIDER}`);
+    process.exit(1);
+  });
