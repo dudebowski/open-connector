@@ -82,7 +82,49 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/callback', async (req, res) => {
-  res.status(501).send();
+  // take nonce from cookie
+  const nonce = req.signedCookies[nonceCookie];
+  // delete nonce
+  delete req.signedCookies[nonceCookie];
+  // take ID Token posted by the user
+  const { id_token } = req.body;
+  // decode token
+  const decodedToken = jwt.decode(id_token, { complete: true });
+  // get key id
+  const kid = decodedToken.header.kid;
+  // get public key
+  const client = jwksClient({
+    jwksUri: oidcProviderInfo['jwks_uri']
+  });
+
+  client.getSigningKey(kid, (err, key) => {
+    const signingKey = key.publicKey || key.rsaPublicKey;
+    // verify signature & decode token
+    const verifiedToken = jwt.verify(id_token, signingKey);
+    // check audience, nonce, and expiration time
+    const {
+      nonce: decodedNonce,
+      aud: audience,
+      exp: expirationDate,
+      iss: issuer
+    } = verifiedToken;
+    const currentTime = Math.floor(Date.now() / 1000);
+    const expectedAudience = process.env.CLIENT_ID;
+    if (
+      audience !== expectedAudience ||
+      decodedNonce !== nonce ||
+      expirationDate < currentTime ||
+      issuer !== oidcProviderInfo['issuer']
+    ) {
+      // send an unauthorized http status
+      return res.status(401).send();
+    }
+    req.session.decodedIdToken = verifiedToken;
+    req.session.idToken = id_token;
+    35;
+    // send the decoded version of the ID Token
+    res.redirect('/profile');
+  });
 });
 
 app.get('/to-dos', async (req, res) => {
